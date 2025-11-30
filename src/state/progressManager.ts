@@ -32,6 +32,14 @@ export type MathProgress = {
   room: {
     ownedItems: string[];
     placedItems: {id: string; x: number; y: number}[];
+    background: string;
+  };
+  avatar: {
+    skinColor: string;
+    hairStyle: string;
+    hairColor: string;
+    outfit: string;
+    accessory?: string;
   };
   achievements: string[];
   dailyChallenge: {
@@ -66,6 +74,13 @@ const defaultProgress = (): MathProgress => ({
   room: {
     ownedItems: [],
     placedItems: [],
+    background: "default",
+  },
+  avatar: {
+    skinColor: "#FFDFC4",
+    hairStyle: "bob",
+    hairColor: "#8D5524",
+    outfit: "tshirt",
   },
   achievements: [],
   dailyChallenge: null,
@@ -77,17 +92,26 @@ export const loadProgress = (): MathProgress => {
     const data = localStorage.getItem(STORAGE_KEY);
     if (!data) return defaultProgress();
     const parsed = JSON.parse(data) as MathProgress;
+    const def = defaultProgress();
     return {
-      ...defaultProgress(),
+      ...def,
       ...parsed,
       skills: {
-        ...defaultProgress().skills,
+        ...def.skills,
         ...parsed.skills,
         multiplication: {
           ...defaultSkill(),
           ...parsed.skills?.multiplication,
           tables: parsed.skills?.multiplication?.tables || {},
         },
+      },
+      room: {
+        ...def.room,
+        ...parsed.room,
+      },
+      avatar: {
+        ...def.avatar,
+        ...parsed.avatar,
       },
       dailyChallenge: parsed.dailyChallenge || null,
     };
@@ -295,4 +319,49 @@ export const updateDailyChallenge = (
 
   saveProgress(updated);
   return updated;
+};
+
+export const updateRoomLayout = (
+  progress: MathProgress,
+  placedItems: {id: string; x: number; y: number}[]
+): MathProgress => {
+  const next = {
+    ...progress,
+    room: {
+      ...progress.room,
+      placedItems,
+    },
+  };
+  saveProgress(next);
+  return next;
+};
+
+export const updateRoomBackground = (
+  progress: MathProgress,
+  background: string
+): MathProgress => {
+  const next = {
+    ...progress,
+    room: {
+      ...progress.room,
+      background,
+    },
+  };
+  saveProgress(next);
+  return next;
+};
+
+export const updateAvatar = (
+  progress: MathProgress,
+  avatar: Partial<MathProgress["avatar"]>
+): MathProgress => {
+  const next = {
+    ...progress,
+    avatar: {
+      ...progress.avatar,
+      ...avatar,
+    },
+  };
+  saveProgress(next);
+  return next;
 };

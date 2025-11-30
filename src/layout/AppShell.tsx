@@ -32,22 +32,22 @@ export default function AppShell() {
             <NavStats />
           </div>
           <nav className="flex items-center gap-2 text-night">
-            <NavLink className={navLinkClass} to="/">
+            <NavLink className={navLinkClass} to="/" onClick={() => soundManager.play('click')}>
               {t("nav.home")}
             </NavLink>
-            <NavLink className={navLinkClass} to="/practice">
+            <NavLink className={navLinkClass} to="/practice" onClick={() => soundManager.play('click')}>
               {t("nav.practice")}
             </NavLink>
-            <NavLink className={navLinkClass} to="/trainer">
+            <NavLink className={navLinkClass} to="/trainer" onClick={() => soundManager.play('click')}>
               {t("nav.trainer")}
             </NavLink>
-            <NavLink className={navLinkClass} to="/room">
+            <NavLink className={navLinkClass} to="/room" onClick={() => soundManager.play('click')}>
               {t("nav.room")}
             </NavLink>
-            <NavLink className={navLinkClass} to="/progress">
+            <NavLink className={navLinkClass} to="/progress" onClick={() => soundManager.play('click')}>
               {t("nav.progress")}
             </NavLink>
-            <NavLink className={navLinkClass} to="/settings">
+            <NavLink className={navLinkClass} to="/settings" onClick={() => soundManager.play('click')}>
               {t("nav.settings")}
             </NavLink>
             <LanguageSwitcher />

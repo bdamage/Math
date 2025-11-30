@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useProgress } from "../state/useProgress";
 import { generateQuestion, Question } from "../state/questionGenerator";
 import { useEffect } from "react";
+import { soundManager } from "../utils/soundManager";
 
 const tables = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -36,7 +37,11 @@ export default function MultiplicationTrainer() {
   const handleChoice = (choice: number) => {
     const isCorrect = choice === question.answer;
     if (isCorrect) {
+      soundManager.play('correct');
       addPoints(mode === "challenge" ? 10 : 5);
+      soundManager.play('coin');
+    } else {
+      soundManager.play('incorrect');
     }
     logSession({ correct: isCorrect ? 1 : 0, total: 1, skill: "multiplication", table: activeTable });
     askNext(activeTable);
@@ -53,7 +58,10 @@ export default function MultiplicationTrainer() {
           {["practice", "challenge"].map((m) => (
             <button
               key={m}
-              onClick={() => setMode(m as typeof mode)}
+              onClick={() => {
+                soundManager.play('click');
+                setMode(m as typeof mode);
+              }}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                 mode === m ? "bg-night text-white" : "bg-white border border-slate-200"
               }`}

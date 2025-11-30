@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useProgress } from "../state/useProgress";
 import { useEffect, useState } from "react";
+import { soundManager } from "../utils/soundManager";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -76,7 +77,10 @@ export default function Dashboard() {
             </div>
           )}
           <button
-            onClick={() => navigate("/practice", { state: { skill: dailyChallenge?.skill } })}
+            onClick={() => {
+              soundManager.play('click');
+              navigate("/practice", { state: { skill: dailyChallenge?.skill } });
+            }}
             className="mt-4 inline-block rounded-full bg-night px-4 py-2 text-white font-semibold hover:bg-night/90 transition"
             disabled={dailyChallenge?.completed}
           >

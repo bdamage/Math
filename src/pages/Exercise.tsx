@@ -5,6 +5,8 @@ import { generateQuestion, Difficulty, Skill, Question } from "../state/question
 import { useProgress } from "../state/useProgress";
 import Confetti from "../components/Confetti";
 import MultiplicationVisual from "../components/MultiplicationVisual";
+import Hint from "../components/Hint";
+import { soundManager } from "../utils/soundManager";
 
 const ROUND_LENGTH = 10;
 
@@ -24,6 +26,7 @@ export default function Exercise() {
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
   const [finished, setFinished] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
     setQuestion(generateQuestion(skill, difficulty, table));
@@ -31,6 +34,7 @@ export default function Exercise() {
     setScore(0);
     setFeedback(null);
     setFinished(false);
+    setShowHint(false);
   }, [skill, difficulty, table]);
 
   const progress = useMemo(() => `${roundIndex + 1}/${ROUND_LENGTH}`, [roundIndex]);
@@ -39,9 +43,17 @@ export default function Exercise() {
     if (finished || feedback) return; // Prevent double-clicking
     const isCorrect = value === question.answer;
     setFeedback(isCorrect ? "correct" : "incorrect");
+    
+    // Play sound effect
+    soundManager.play(isCorrect ? 'correct' : 'incorrect');
+    
     const newScore = isCorrect ? score + 1 : score;
-    if (isCorrect) addPoints(5);
+    if (isCorrect) {
+      addPoints(5);
+      soundManager.play('coin');
+    }
     setScore(newScore);
+    setShowHint(false);
 
     const nextRoundIndex = roundIndex + 1;
     if (nextRoundIndex >= ROUND_LENGTH) {
@@ -52,6 +64,7 @@ export default function Exercise() {
       // Show confetti for good performance
       if (newScore >= ROUND_LENGTH * 0.8) {
         setShowConfetti(true);
+        soundManager.celebrate();
         setTimeout(() => setShowConfetti(false), 3000);
       }
       return;
@@ -61,6 +74,7 @@ export default function Exercise() {
       setQuestion(generateQuestion(skill, difficulty, table));
       setRoundIndex(nextRoundIndex);
       setFeedback(null);
+      setShowHint(false);
     }, 1000); // Increased to 1 second for kids to see feedback
   };
 
@@ -105,6 +119,30 @@ export default function Exercise() {
             </button>
           ))}
         </div>
+        
+        {!finished && !feedback && difficulty !== "easy" && (
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => {
+                setShowHint(!showHint);
+                soundManager.play('click');
+              }}
+              className="text-sm text-ocean hover:text-ocean/80 font-semibold transition"
+            >
+              {showHint ? '👁️ Hide Hint' : '💡 Show Hint'}
+            </button>
+          </div>
+        )}
+        
+        {showHint && !feedback && !finished && (
+          <Hint 
+            skill={skill} 
+            a={parseInt(question.prompt.match(/(\d+)/g)?.[0] || '0')} 
+            b={parseInt(question.prompt.match(/(\d+)/g)?.[1] || '0')} 
+            answer={question.answer}
+          />
+        )}
+        
         {feedback && (
           <p
             className={`mt-4 text-center font-semibold ${

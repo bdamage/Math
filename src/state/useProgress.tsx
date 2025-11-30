@@ -10,7 +10,10 @@ import {
   updateSkillProgress,
   spendCoins,
   getDailyChallenge,
-  updateDailyChallenge
+  updateDailyChallenge,
+  updateRoomLayout,
+  updateRoomBackground,
+  updateAvatar
 } from "./progressManager";
 import { evaluateAchievements, checkPerfectRound } from "./achievements";
 
@@ -24,6 +27,9 @@ type ProgressContextValue = {
   reset: () => void;
   getDailyChallenge: () => MathProgress["dailyChallenge"];
   updateDailyChallenge: (skill: Parameters<typeof updateDailyChallenge>[1], questionsCompleted: number) => void;
+  updateRoomLayout: (items: { id: string; x: number; y: number }[]) => void;
+  updateRoomBackground: (background: string) => void;
+  updateAvatar: (avatar: Partial<MathProgress["avatar"]>) => void;
 };
 
 const ProgressContext = createContext<ProgressContextValue | undefined>(undefined);
@@ -84,6 +90,15 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
   const handleUpdateDailyChallenge = (skill: Parameters<typeof updateDailyChallenge>[1], questionsCompleted: number) =>
     setProgress((prev) => updateDailyChallenge(prev, skill, questionsCompleted));
 
+  const handleUpdateRoomLayout = (items: { id: string; x: number; y: number }[]) =>
+    setProgress((prev) => updateRoomLayout(prev, items));
+
+  const handleUpdateRoomBackground = (background: string) =>
+    setProgress((prev) => updateRoomBackground(prev, background));
+
+  const handleUpdateAvatar = (avatar: Partial<MathProgress["avatar"]>) =>
+    setProgress((prev) => updateAvatar(prev, avatar));
+
   return (
     <ProgressContext.Provider
       value={{
@@ -95,7 +110,10 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
         spendCoins: handleSpendCoins,
         reset: handleReset,
         getDailyChallenge: handleGetDailyChallenge,
-        updateDailyChallenge: handleUpdateDailyChallenge
+        updateDailyChallenge: handleUpdateDailyChallenge,
+        updateRoomLayout: handleUpdateRoomLayout,
+        updateRoomBackground: handleUpdateRoomBackground,
+        updateAvatar: handleUpdateAvatar
       }}
     >
       {children}
