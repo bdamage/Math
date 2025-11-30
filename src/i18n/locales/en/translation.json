@@ -18,6 +18,9 @@
     "cta": "Start a quick round",
     "challengeTitle": "10× Questions",
     "challengeBody": "Complete a set to earn 50 coins.",
+    "challengeProgress": "{{progress}}/{{target}} complete",
+    "challengeComplete": "Challenge completed! Come back tomorrow for a new one.",
+    "completed": "Completed",
     "mascotTitle": "Mascot Tip",
     "mascotBody": "Try a streak of 5 days in a row to unlock a special room item."
   },
@@ -56,10 +59,23 @@
     "buy": "Buy",
     "notEnough": "Not enough coins",
     "previewEmpty": "Buy an item to see it here",
+    "shopDescription": "Decorate your room with items you earn!",
     "items": {
       "lamp": "Cozy Lamp",
       "plant": "Green Plant",
-      "poster": "Math Poster"
+      "poster": "Math Poster",
+      "desk": "Study Desk",
+      "chair": "Comfy Chair",
+      "bookshelf": "Bookshelf",
+      "rug": "Colorful Rug",
+      "clock": "Wall Clock",
+      "trophy": "Trophy",
+      "globe": "World Globe",
+      "cat": "Pet Cat",
+      "dog": "Pet Dog",
+      "fish": "Pet Fish",
+      "computer": "Computer",
+      "tablet": "Tablet"
     }
   },
   "progress": {
@@ -101,6 +117,7 @@
     "brand": "Math Quest",
     "goPractice": "Go to practice",
     "level": "Level",
-    "owned": "Owned"
+    "owned": "Owned",
+    "completed": "Completed"
   }
 }

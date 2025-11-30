@@ -8,9 +8,11 @@ import {
   resetProgress,
   unlockItem,
   updateSkillProgress,
-  spendCoins
+  spendCoins,
+  getDailyChallenge,
+  updateDailyChallenge
 } from "./progressManager";
-import { evaluateAchievements } from "./achievements";
+import { evaluateAchievements, checkPerfectRound } from "./achievements";
 
 type ProgressContextValue = {
   progress: MathProgress;
@@ -20,6 +22,8 @@ type ProgressContextValue = {
   unlockItem: (itemId: string) => void;
   spendCoins: (amount: number) => void;
   reset: () => void;
+  getDailyChallenge: () => MathProgress["dailyChallenge"];
+  updateDailyChallenge: (skill: Parameters<typeof updateDailyChallenge>[1], questionsCompleted: number) => void;
 };
 
 const ProgressContext = createContext<ProgressContextValue | undefined>(undefined);
@@ -32,7 +36,7 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
     skill: Parameters<typeof updateSkillProgress>[1],
     table?: number
   ) => {
-    const newlyUnlocked = evaluateAchievements(next, { skill, streak: next.streakDays, table });
+    const newlyUnlocked = evaluateAchievements(next, { skill, table });
     if (newlyUnlocked.length) {
       next = {
         ...next,
@@ -55,7 +59,19 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
     setProgress((prev) => withAchievements(updateSkillProgress(prev, skill, correct, total, table), skill, table));
 
   const handleLogSession = (params: Parameters<typeof logPracticeSession>[1]) =>
-    setProgress((prev) => withAchievements(logPracticeSession(prev, params), params.skill, params.table));
+    setProgress((prev) => {
+      let next = logPracticeSession(prev, params);
+      // Check for perfect round achievement
+      const perfectUnlocked = checkPerfectRound(next, params.correct, params.total);
+      if (perfectUnlocked.length) {
+        next = {
+          ...next,
+          achievements: Array.from(new Set([...next.achievements, ...perfectUnlocked]))
+        };
+        saveProgress(next);
+      }
+      return withAchievements(next, params.skill, params.table);
+    });
 
   const handleUnlockItem = (itemId: string) =>
     setProgress((prev) => withAchievements(unlockItem(prev, itemId), "addition"));
@@ -63,6 +79,10 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
   const handleReset = () => setProgress(() => resetProgress());
   const handleSpendCoins = (amount: number) =>
     setProgress((prev) => withAchievements(spendCoins(prev, amount), "addition"));
+  
+  const handleGetDailyChallenge = () => getDailyChallenge(progress);
+  const handleUpdateDailyChallenge = (skill: Parameters<typeof updateDailyChallenge>[1], questionsCompleted: number) =>
+    setProgress((prev) => updateDailyChallenge(prev, skill, questionsCompleted));
 
   return (
     <ProgressContext.Provider
@@ -73,7 +93,9 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
         logSession: handleLogSession,
         unlockItem: handleUnlockItem,
         spendCoins: handleSpendCoins,
-        reset: handleReset
+        reset: handleReset,
+        getDailyChallenge: handleGetDailyChallenge,
+        updateDailyChallenge: handleUpdateDailyChallenge
       }}
     >
       {children}

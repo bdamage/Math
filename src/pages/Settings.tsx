@@ -5,8 +5,13 @@ import { useProgress } from "../state/useProgress";
 export default function SettingsPage() {
   const { t } = useTranslation();
   const { reset } = useProgress();
-  const [soundOn, setSoundOn] = useState(true);
-  const [difficulty, setDifficulty] = useState("easy");
+  const [soundOn, setSoundOn] = useState(() => {
+    const saved = localStorage.getItem("soundEnabled");
+    return saved === null ? true : saved === "true";
+  });
+  const [difficulty, setDifficulty] = useState(() => {
+    return localStorage.getItem("defaultDifficulty") || "easy";
+  });
 
   return (
     <div className="space-y-4">
@@ -19,7 +24,11 @@ export default function SettingsPage() {
             <p className="text-sm text-night/60">{soundOn ? t("settings.soundOn") : t("settings.soundOff")}</p>
           </div>
           <button
-            onClick={() => setSoundOn((v) => !v)}
+            onClick={() => {
+              const newValue = !soundOn;
+              setSoundOn(newValue);
+              localStorage.setItem("soundEnabled", String(newValue));
+            }}
             className="rounded-full bg-night px-4 py-2 text-white font-semibold"
           >
             {t("settings.toggle")}
@@ -32,7 +41,11 @@ export default function SettingsPage() {
           </div>
           <select
             value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setDifficulty(newValue);
+              localStorage.setItem("defaultDifficulty", newValue);
+            }}
             className="rounded-lg border border-slate-200 px-3 py-2"
           >
             <option value="easy">{t("skill.difficultyOptions.easy")}</option>

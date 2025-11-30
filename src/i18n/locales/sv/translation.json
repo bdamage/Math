@@ -18,6 +18,9 @@
     "cta": "Starta en snabb runda",
     "challengeTitle": "10× frågor",
     "challengeBody": "Klara ett set för att få 50 mynt.",
+    "challengeProgress": "{{progress}}/{{target}} klart",
+    "challengeComplete": "Utmaning klar! Kom tillbaka imorgon för en ny.",
+    "completed": "Klart",
     "mascotTitle": "Maskott-tips",
     "mascotBody": "Försök hålla en streak på 5 dagar i rad för att låsa upp ett rumsföremål."
   },
@@ -56,10 +59,23 @@
     "buy": "Köp",
     "notEnough": "Inte tillräckligt med mynt",
     "previewEmpty": "Köp något för att se det här",
+    "shopDescription": "Dekorera ditt rum med saker du tjänar!",
     "items": {
       "lamp": "Mysig lampa",
       "plant": "Grön växt",
-      "poster": "Matteposter"
+      "poster": "Matteposter",
+      "desk": "Studieskrivbord",
+      "chair": "Bekväm stol",
+      "bookshelf": "Bokhylla",
+      "rug": "Färgglad matta",
+      "clock": "Väggklocka",
+      "trophy": "Trofé",
+      "globe": "Världsgloµ",
+      "cat": "Husdjurskatt",
+      "dog": "Husdjurshund",
+      "fish": "Husdjursfisk",
+      "computer": "Dator",
+      "tablet": "Surfplatta"
     }
   },
   "progress": {
@@ -101,6 +117,7 @@
     "brand": "Math Quest",
     "goPractice": "Gå till träna",
     "level": "Nivå",
-    "owned": "Ägs"
+    "owned": "Ägs",
+    "completed": "Klart"
   }
 }

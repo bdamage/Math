@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const skills = ["addition", "subtraction", "multiplication", "division"] as const;
 const difficulties = ["easy", "medium", "hard"] as const;
@@ -8,9 +8,22 @@ const tables = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export default function SkillSelect() {
   const { t } = useTranslation();
-  const [skill, setSkill] = useState<(typeof skills)[number]>("multiplication");
-  const [difficulty, setDifficulty] = useState<(typeof difficulties)[number]>("easy");
+  const location = useLocation();
+  const state = location.state as { skill?: string } | undefined;
+  
+  const [skill, setSkill] = useState<(typeof skills)[number]>(
+    (state?.skill as (typeof skills)[number]) || "multiplication"
+  );
+  const [difficulty, setDifficulty] = useState<(typeof difficulties)[number]>(() => {
+    return (localStorage.getItem("defaultDifficulty") as (typeof difficulties)[number]) || "easy";
+  });
   const [table, setTable] = useState<number>(2);
+  
+  useEffect(() => {
+    if (state?.skill && skills.includes(state.skill as any)) {
+      setSkill(state.skill as (typeof skills)[number]);
+    }
+  }, [state?.skill]);
 
   return (
     <div className="space-y-6">

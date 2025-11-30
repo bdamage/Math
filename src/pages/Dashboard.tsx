@@ -1,10 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useProgress } from "../state/useProgress";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const { progress } = useProgress();
+  const { progress, getDailyChallenge } = useProgress();
+  const navigate = useNavigate();
+  const [dailyChallenge, setDailyChallenge] = useState(getDailyChallenge());
+  
+  useEffect(() => {
+    setDailyChallenge(getDailyChallenge());
+  }, [progress.dailyChallenge, getDailyChallenge]);
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">
@@ -37,15 +44,44 @@ export default function Dashboard() {
       </div>
       <div className="space-y-4">
         <div className="rounded-2xl bg-gradient-to-br from-sunshine to-coral text-night p-6 shadow-sm">
-          <p className="text-sm font-semibold">{t("dashboard.daily")}</p>
-          <h2 className="text-2xl font-bold mt-1">{t("dashboard.challengeTitle")}</h2>
-          <p className="mt-2 text-night/80">{t("dashboard.challengeBody")}</p>
-          <Link
-            to="/practice"
-            className="mt-4 inline-block rounded-full bg-night px-4 py-2 text-white font-semibold"
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-semibold">{t("dashboard.daily")}</p>
+            {dailyChallenge?.completed && (
+              <span className="text-xs font-bold bg-night/20 px-2 py-1 rounded-full">
+                ✓ {t("common.completed")}
+              </span>
+            )}
+          </div>
+          <h2 className="text-2xl font-bold mt-1">
+            {dailyChallenge ? t(`skill.${dailyChallenge.skill}`) : t("dashboard.challengeTitle")}
+          </h2>
+          <p className="mt-2 text-night/80">
+            {dailyChallenge && !dailyChallenge.completed && (
+              <>
+                {t("dashboard.challengeProgress", { 
+                  progress: dailyChallenge.progress, 
+                  target: dailyChallenge.target 
+                })} • {dailyChallenge.reward} {t("nav.coins")}
+              </>
+            )}
+            {dailyChallenge?.completed && t("dashboard.challengeComplete")}
+            {!dailyChallenge && t("dashboard.challengeBody")}
+          </p>
+          {dailyChallenge && !dailyChallenge.completed && (
+            <div className="mt-3 w-full bg-night/20 rounded-full h-2">
+              <div 
+                className="bg-night h-2 rounded-full transition-all duration-300"
+                style={{ width: `${(dailyChallenge.progress / dailyChallenge.target) * 100}%` }}
+              />
+            </div>
+          )}
+          <button
+            onClick={() => navigate("/practice", { state: { skill: dailyChallenge?.skill } })}
+            className="mt-4 inline-block rounded-full bg-night px-4 py-2 text-white font-semibold hover:bg-night/90 transition"
+            disabled={dailyChallenge?.completed}
           >
-            {t("common.goPractice")}
-          </Link>
+            {dailyChallenge?.completed ? t("dashboard.completed") : t("common.goPractice")}
+          </button>
         </div>
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <h3 className="text-lg font-bold text-night">{t("dashboard.mascotTitle")}</h3>

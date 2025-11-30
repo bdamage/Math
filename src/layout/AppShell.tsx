@@ -1,5 +1,6 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import NavStats from "../components/NavStats";
 
@@ -10,6 +11,16 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 export default function AppShell() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Check if first time user
+    const hasSeenOnboarding = localStorage.getItem("onboarding_complete");
+    if (!hasSeenOnboarding && location.pathname !== "/onboarding") {
+      navigate("/onboarding");
+    }
+  }, [navigate, location.pathname]);
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-100 via-white to-mint/20">
       <header className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-slate-200">

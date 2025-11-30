@@ -2,9 +2,21 @@ import { useTranslation } from "react-i18next";
 import { useProgress } from "../state/useProgress";
 
 const SHOP_ITEMS = [
-  { id: "lamp", nameKey: "lamp", cost: 50 },
-  { id: "plant", nameKey: "plant", cost: 40 },
-  { id: "poster", nameKey: "poster", cost: 60 }
+  { id: "lamp", nameKey: "lamp", cost: 50, category: "furniture" },
+  { id: "plant", nameKey: "plant", cost: 40, category: "decoration" },
+  { id: "poster", nameKey: "poster", cost: 60, category: "decoration" },
+  { id: "desk", nameKey: "desk", cost: 100, category: "furniture" },
+  { id: "chair", nameKey: "chair", cost: 80, category: "furniture" },
+  { id: "bookshelf", nameKey: "bookshelf", cost: 120, category: "furniture" },
+  { id: "rug", nameKey: "rug", cost: 70, category: "decoration" },
+  { id: "clock", nameKey: "clock", cost: 45, category: "decoration" },
+  { id: "trophy", nameKey: "trophy", cost: 150, category: "decoration" },
+  { id: "globe", nameKey: "globe", cost: 65, category: "decoration" },
+  { id: "cat", nameKey: "cat", cost: 200, category: "pet" },
+  { id: "dog", nameKey: "dog", cost: 200, category: "pet" },
+  { id: "fish", nameKey: "fish", cost: 100, category: "pet" },
+  { id: "computer", nameKey: "computer", cost: 250, category: "electronics" },
+  { id: "tablet", nameKey: "tablet", cost: 180, category: "electronics" }
 ];
 
 export default function RoomShop() {
@@ -41,6 +53,8 @@ export default function RoomShop() {
 
       <div className="space-y-3">
         <h2 className="text-xl font-bold text-night">{t("room.shop")}</h2>
+        <p className="text-sm text-night/60">{t("room.shopDescription")}</p>
+        <div className="max-h-[600px] overflow-y-auto space-y-2 pr-2">
         {SHOP_ITEMS.map((item) => {
           const owned = progress.room.ownedItems.includes(item.id);
           const canAfford = progress.coins >= item.cost;
@@ -68,7 +82,8 @@ export default function RoomShop() {
             </div>
           );
         })}
+        </div>
       </div>
     </div>
-  );
+  )
 }

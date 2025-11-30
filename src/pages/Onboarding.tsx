@@ -1,9 +1,15 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export default function Onboarding() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const steps = t("onboarding.steps", { returnObjects: true }) as { title: string; body: string }[];
+
+  const handleComplete = () => {
+    localStorage.setItem("onboarding_complete", "true");
+    navigate("/");
+  };
 
   return (
     <div className="space-y-6">
@@ -16,12 +22,12 @@ export default function Onboarding() {
           </div>
         ))}
       </div>
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2 rounded-full bg-night px-5 py-3 text-white font-semibold shadow hover:bg-night/90"
+      <button
+        onClick={handleComplete}
+        className="inline-flex items-center gap-2 rounded-full bg-night px-5 py-3 text-white font-semibold shadow hover:bg-night/90 transition"
       >
         {t("onboarding.start")} →
-      </Link>
+      </button>
     </div>
   );
 }

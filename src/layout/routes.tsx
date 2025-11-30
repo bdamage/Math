@@ -13,22 +13,29 @@ import { ProgressProvider } from "../state/useProgress";
 
 const withProviders = (node: React.ReactNode) => <ProgressProvider>{node}</ProgressProvider>;
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: withProviders(<AppShell />),
+      errorElement: withProviders(<RouterError />),
+      children: [
+        { index: true, element: <Dashboard /> },
+        { path: "practice", element: <SkillSelect /> },
+        { path: "exercise", element: <Exercise /> },
+        { path: "trainer", element: <MultiplicationTrainer /> },
+        { path: "room", element: <RoomShop /> },
+        { path: "progress", element: <ProgressPage /> },
+        { path: "settings", element: <SettingsPage /> },
+        { path: "onboarding", element: <Onboarding /> }
+      ]
+    }
+  ],
   {
-    path: "/",
-    element: withProviders(<AppShell />),
-    errorElement: withProviders(<RouterError />),
-    children: [
-      { index: true, element: <Dashboard /> },
-      { path: "practice", element: <SkillSelect /> },
-      { path: "exercise", element: <Exercise /> },
-      { path: "trainer", element: <MultiplicationTrainer /> },
-      { path: "room", element: <RoomShop /> },
-      { path: "progress", element: <ProgressPage /> },
-      { path: "settings", element: <SettingsPage /> },
-      { path: "onboarding", element: <Onboarding /> }
-    ]
+    future: {
+      v7_startTransition: true
+    }
   }
-]);
+);
 
 export default router;

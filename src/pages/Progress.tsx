@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { ACHIEVEMENTS } from "../state/achievements";
 import { useProgress } from "../state/useProgress";
+import { Medal } from "../components/Medal";
 
 export default function ProgressPage() {
   const { t } = useTranslation();
@@ -41,15 +42,23 @@ export default function ProgressPage() {
             return (
               <div
                 key={badge.id}
-                className={`rounded-2xl border p-4 shadow-sm ${
-                  unlocked ? "border-mint/60 bg-mint/20" : "border-slate-200 bg-white"
+                className={`rounded-2xl border p-4 shadow-sm flex items-center gap-4 transition-colors duration-300 ${
+                  unlocked ? "border-mint/60 bg-mint/10" : "border-slate-200 bg-white"
                 }`}
               >
-                <p className="text-lg font-bold text-night">{badge.title}</p>
-                <p className="text-sm text-night/70">{badge.description}</p>
-                <p className="mt-2 text-xs font-semibold text-night/60">
-                  {unlocked ? t("progress.unlocked") : t("progress.locked")}
-                </p>
+                <Medal 
+                  variant={badge.medalVariant} 
+                  tier={badge.medalTier} 
+                  unlocked={unlocked} 
+                  className="flex-shrink-0 w-16 h-16" 
+                />
+                <div>
+                  <p className="text-lg font-bold text-night">{badge.title}</p>
+                  <p className="text-sm text-night/70">{badge.description}</p>
+                  <p className={`mt-1 text-xs font-bold uppercase tracking-wider ${unlocked ? 'text-mint' : 'text-slate-400'}`}>
+                    {unlocked ? t("progress.unlocked") : t("progress.locked")}
+                  </p>
+                </div>
               </div>
             );
           })}
