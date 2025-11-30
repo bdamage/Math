@@ -52,7 +52,7 @@ class SoundManager {
   }
 
   private getAudioContext(): AudioContext {
-    if (!this.audioContext || this.audioContext.state === 'closed') {
+    if (!this.audioContext || this.audioContext.state === "closed") {
       this.audioContext = new (window.AudioContext ||
         (window as any).webkitAudioContext)();
     }
@@ -96,14 +96,14 @@ class SoundManager {
         oscillator.disconnect();
         gainNode.disconnect();
         this.activeSounds--;
-        
+
         // Remove this cleanup from pending list
         const index = this.pendingCleanups.indexOf(cleanupId);
         if (index > -1) {
           this.pendingCleanups.splice(index, 1);
         }
       }, duration * 1000 + 100);
-      
+
       this.pendingCleanups.push(cleanupId);
     } catch (error) {
       this.activeSounds--;
@@ -149,11 +149,11 @@ class SoundManager {
 
   // Clean up all pending sounds and audio context
   cleanup() {
-    this.pendingCleanups.forEach(id => clearTimeout(id));
+    this.pendingCleanups.forEach((id) => clearTimeout(id));
     this.pendingCleanups = [];
     this.activeSounds = 0;
-    
-    if (this.audioContext && this.audioContext.state !== 'closed') {
+
+    if (this.audioContext && this.audioContext.state !== "closed") {
       this.audioContext.close().catch(() => {});
       this.audioContext = null;
     }
@@ -164,8 +164,8 @@ class SoundManager {
 export const soundManager = new SoundManager();
 
 // Cleanup on page unload
-if (typeof window !== 'undefined') {
-  window.addEventListener('beforeunload', () => {
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeunload", () => {
     soundManager.cleanup();
   });
 }
