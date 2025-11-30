@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Hem",
+    "practice": "Träna",
+    "trainer": "Tränare",
+    "room": "Mitt rum",
+    "progress": "Framsteg",
+    "settings": "Inställningar",
+    "points": "Poäng",
+    "coins": "Mynt",
+    "streak": "Streak"
+  },
+  "dashboard": {
+    "welcome": "Välkommen tillbaka, Matematiksufrare!",
+    "daily": "Dagens utmaning",
+    "practiceMultiplication": "Träna multiplikation",
+    "continue": "Fortsätt senaste spelet",
+    "cta": "Starta en snabb runda"
+  },
+  "skill": {
+    "title": "Välj en färdighet",
+    "difficulty": "Svårighetsgrad",
+    "table": "Tabell",
+    "start": "Börja träna"
+  },
+  "exercise": {
+    "question": "Fråga",
+    "correct": "Snyggt jobbat!",
+    "incorrect": "Försök igen!",
+    "summary": "Runds sammanfattning",
+    "score": "Poäng",
+    "retry": "Försök igen",
+    "home": "Tillbaka hem"
+  },
+  "trainer": {
+    "title": "Multiplikationstränare",
+    "practice": "Övningsläge",
+    "challenge": "Utmaningsläge",
+    "chooseTable": "Välj tabeller"
+  },
+  "room": {
+    "title": "Mitt rum",
+    "shop": "Butik",
+    "buy": "Köp",
+    "notEnough": "Inte tillräckligt med mynt"
+  },
+  "progress": {
+    "title": "Framsteg och medaljer",
+    "mastery": "Färdighet",
+    "badges": "Medaljer"
+  },
+  "settings": {
+    "title": "Inställningar",
+    "sound": "Ljud",
+    "difficulty": "Standard svårighet",
+    "reset": "Nollställ framsteg",
+    "confirmReset": "Är du säker på att du vill nollställa allt?"
+  }
+}

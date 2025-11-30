@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Home",
+    "practice": "Practice",
+    "trainer": "Trainer",
+    "room": "My Room",
+    "progress": "Progress",
+    "settings": "Settings",
+    "points": "Points",
+    "coins": "Coins",
+    "streak": "Streak"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, Math Explorer!",
+    "daily": "Daily challenge",
+    "practiceMultiplication": "Practice Multiplication",
+    "continue": "Continue last game",
+    "cta": "Start a quick round"
+  },
+  "skill": {
+    "title": "Choose a skill",
+    "difficulty": "Difficulty",
+    "table": "Table",
+    "start": "Start practice"
+  },
+  "exercise": {
+    "question": "Question",
+    "correct": "Great job!",
+    "incorrect": "Try again!",
+    "summary": "Round summary",
+    "score": "Score",
+    "retry": "Retry",
+    "home": "Back home"
+  },
+  "trainer": {
+    "title": "Multiplication Trainer",
+    "practice": "Practice mode",
+    "challenge": "Challenge mode",
+    "chooseTable": "Choose tables"
+  },
+  "room": {
+    "title": "My Room",
+    "shop": "Shop",
+    "buy": "Buy",
+    "notEnough": "Not enough coins"
+  },
+  "progress": {
+    "title": "Progress & Achievements",
+    "mastery": "Mastery",
+    "badges": "Badges"
+  },
+  "settings": {
+    "title": "Settings",
+    "sound": "Sound",
+    "difficulty": "Default difficulty",
+    "reset": "Reset progress",
+    "confirmReset": "Are you sure you want to reset all progress?"
+  }
+}
