@@ -40,6 +40,7 @@ export type MathProgress = {
     hairColor: string;
     outfit: string;
     accessory?: string;
+    variant?: "boy" | "girl";
   };
   achievements: string[];
   dailyChallenge: {

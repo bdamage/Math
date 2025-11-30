@@ -12,7 +12,7 @@ export default function Dashboard() {
   
   useEffect(() => {
     setDailyChallenge(getDailyChallenge());
-  }, [progress.dailyChallenge, getDailyChallenge]);
+  }, [progress.dailyChallenge]);
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">
@@ -25,12 +25,14 @@ export default function Dashboard() {
             <Link
               to="/trainer"
               className="rounded-xl bg-ocean px-4 py-3 text-white font-semibold shadow hover:bg-ocean/90"
+              onClick={() => soundManager.play('click')}
             >
               {t("dashboard.practiceMultiplication")}
             </Link>
             <Link
-              to="/exercise"
+              to="/practice"
               className="rounded-xl bg-night px-4 py-3 text-white font-semibold shadow hover:bg-night/90"
+              onClick={() => soundManager.play('click')}
             >
               {t("dashboard.cta")}
             </Link>

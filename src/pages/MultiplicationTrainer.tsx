@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useProgress } from "../state/useProgress";
 import { generateQuestion, Question } from "../state/questionGenerator";
-import { useEffect } from "react";
 import { soundManager } from "../utils/soundManager";
 
 const tables = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -15,23 +14,33 @@ export default function MultiplicationTrainer() {
   const [question, setQuestion] = useState<Question>(() => generateQuestion("multiplication", "easy", 2));
   const [timer, setTimer] = useState(30);
 
-  const askNext = (table: number) => setQuestion(generateQuestion("multiplication", "easy", table));
+  // Generate new question when activeTable changes
+  useEffect(() => {
+    setQuestion(generateQuestion("multiplication", "easy", activeTable));
+    setTimer(30); // Reset timer when changing tables
+  }, [activeTable]);
 
+  // Handle challenge mode timer
   useEffect(() => {
     if (mode !== "challenge") {
-      setTimer(30);
+      setTimer(30); // Reset timer when leaving challenge mode
       return;
     }
+    
     const id = setInterval(() => {
       setTimer((t) => {
         if (t <= 1) {
-          askNext(activeTable);
+          setQuestion(generateQuestion("multiplication", "easy", activeTable));
           return 30;
         }
         return t - 1;
       });
     }, 1000);
-    return () => clearInterval(id);
+    
+    // Always clean up interval on unmount or mode change
+    return () => {
+      clearInterval(id);
+    };
   }, [mode, activeTable]);
 
   const handleChoice = (choice: number) => {
@@ -44,7 +53,7 @@ export default function MultiplicationTrainer() {
       soundManager.play('incorrect');
     }
     logSession({ correct: isCorrect ? 1 : 0, total: 1, skill: "multiplication", table: activeTable });
-    askNext(activeTable);
+    setQuestion(generateQuestion("multiplication", "easy", activeTable));
   };
 
   return (
@@ -79,8 +88,8 @@ export default function MultiplicationTrainer() {
             <button
               key={table}
               onClick={() => {
+                soundManager.play('click');
                 setActiveTable(table);
-                askNext(table);
               }}
               className={`rounded-full px-3 py-2 text-sm font-semibold transition ${
                 activeTable === table
@@ -94,7 +103,7 @@ export default function MultiplicationTrainer() {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div key={`${activeTable}-${question.prompt}`} className="rounded-2xl bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold text-night/70">
             {mode === "challenge" ? `${timer}s` : t("trainer.practice")}
@@ -103,9 +112,9 @@ export default function MultiplicationTrainer() {
             {t("trainer.mastery")}: {progress.skills.multiplication.tables[activeTable]?.correct || 0}/20
           </div>
         </div>
-        <p className="mt-4 text-center text-4xl font-bold text-night">{question.prompt}</p>
+        <p className="mt-4 text-center text-4xl font-bold text-night">{question?.prompt || "Loading..."}</p>
         <div className="mt-6 grid grid-cols-2 gap-3">
-          {question.choices.map((choice) => (
+          {question?.choices?.map((choice) => (
             <button
               key={choice}
               onClick={() => handleChoice(choice)}
@@ -113,7 +122,7 @@ export default function MultiplicationTrainer() {
             >
               {choice}
             </button>
-          ))}
+          )) || <p className="col-span-2 text-center text-night/50">Generating question...</p>}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 import {
   MathProgress,
   addPoints,
@@ -82,22 +82,22 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
   const handleUnlockItem = (itemId: string) =>
     setProgress((prev) => withAchievements(unlockItem(prev, itemId), "addition"));
 
-  const handleReset = () => setProgress(() => resetProgress());
-  const handleSpendCoins = (amount: number) =>
-    setProgress((prev) => withAchievements(spendCoins(prev, amount), "addition"));
+  const handleReset = useCallback(() => setProgress(() => resetProgress()), []);
+  const handleSpendCoins = useCallback((amount: number) =>
+    setProgress((prev) => withAchievements(spendCoins(prev, amount), "addition")), []);
   
-  const handleGetDailyChallenge = () => getDailyChallenge(progress);
-  const handleUpdateDailyChallenge = (skill: Parameters<typeof updateDailyChallenge>[1], questionsCompleted: number) =>
-    setProgress((prev) => updateDailyChallenge(prev, skill, questionsCompleted));
+  const handleGetDailyChallenge = useCallback(() => getDailyChallenge(progress), [progress]);
+  const handleUpdateDailyChallenge = useCallback((skill: Parameters<typeof updateDailyChallenge>[1], questionsCompleted: number) =>
+    setProgress((prev) => updateDailyChallenge(prev, skill, questionsCompleted)), []);
 
-  const handleUpdateRoomLayout = (items: { id: string; x: number; y: number }[]) =>
-    setProgress((prev) => updateRoomLayout(prev, items));
+  const handleUpdateRoomLayout = useCallback((items: { id: string; x: number; y: number }[]) =>
+    setProgress((prev) => updateRoomLayout(prev, items)), []);
 
-  const handleUpdateRoomBackground = (background: string) =>
-    setProgress((prev) => updateRoomBackground(prev, background));
+  const handleUpdateRoomBackground = useCallback((background: string) =>
+    setProgress((prev) => updateRoomBackground(prev, background)), []);
 
-  const handleUpdateAvatar = (avatar: Partial<MathProgress["avatar"]>) =>
-    setProgress((prev) => updateAvatar(prev, avatar));
+  const handleUpdateAvatar = useCallback((avatar: Partial<MathProgress["avatar"]>) =>
+    setProgress((prev) => updateAvatar(prev, avatar)), []);
 
   return (
     <ProgressContext.Provider

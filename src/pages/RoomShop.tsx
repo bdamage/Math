@@ -6,15 +6,25 @@ import { RoomItem, RoomBackground, Avatar, AssetCategory } from "../components/R
 // --- Shop Data ---
 const SHOP_ITEMS: { id: string; nameKey: string; cost: number; category: AssetCategory }[] = [
   // Furniture
+  { id: "bed", nameKey: "bed", cost: 300, category: "furniture" },
+  { id: "sofa", nameKey: "sofa", cost: 250, category: "furniture" },
+  { id: "wardrobe", nameKey: "wardrobe", cost: 200, category: "furniture" },
+  { id: "table", nameKey: "table", cost: 150, category: "furniture" },
+  { id: "chair", nameKey: "chair", cost: 80, category: "furniture" },
+  { id: "nightstand", nameKey: "nightstand", cost: 100, category: "furniture" },
+  { id: "shelf", nameKey: "shelf", cost: 120, category: "furniture" },
   { id: "lamp", nameKey: "lamp", cost: 50, category: "furniture" },
   { id: "desk", nameKey: "desk", cost: 100, category: "furniture" },
-  { id: "chair", nameKey: "chair", cost: 80, category: "furniture" },
-  { id: "bookshelf", nameKey: "bookshelf", cost: 120, category: "furniture" },
+  { id: "armchair", nameKey: "armchair", cost: 120, category: "furniture" },
+  { id: "coffee_table", nameKey: "coffee_table", cost: 90, category: "furniture" },
+  { id: "ottoman", nameKey: "ottoman", cost: 60, category: "furniture" },
+  { id: "fridge", nameKey: "fridge", cost: 300, category: "furniture" },
   // Decoration
   { id: "plant", nameKey: "plant", cost: 40, category: "decoration" },
   { id: "poster", nameKey: "poster", cost: 60, category: "decoration" },
   { id: "rug", nameKey: "rug", cost: 70, category: "decoration" },
   { id: "clock", nameKey: "clock", cost: 45, category: "decoration" },
+  { id: "mirror", nameKey: "mirror", cost: 55, category: "decoration" },
   { id: "trophy", nameKey: "trophy", cost: 150, category: "decoration" },
   { id: "globe", nameKey: "globe", cost: 65, category: "decoration" },
   // Pets
@@ -24,6 +34,7 @@ const SHOP_ITEMS: { id: string; nameKey: string; cost: number; category: AssetCa
   // Electronics
   { id: "computer", nameKey: "computer", cost: 250, category: "electronics" },
   { id: "tablet", nameKey: "tablet", cost: 180, category: "electronics" },
+  { id: "camera", nameKey: "camera", cost: 150, category: "electronics" },
   // Backgrounds
   { id: "bg_pink", nameKey: "bg_pink", cost: 100, category: "background" },
   { id: "bg_green", nameKey: "bg_green", cost: 100, category: "background" },
@@ -289,32 +300,60 @@ export default function RoomShop() {
       
       <div className="space-y-6">
         <div>
-          <h3 className="font-bold text-night mb-3">Skin Tone</h3>
-          <div className="flex gap-3">
-            {['#FFDFC4', '#E0AC69', '#8D5524', '#5C3A1E'].map(color => (
-              <button
-                key={color}
-                onClick={() => updateAvatar({ skinColor: color })}
-                className={`w-10 h-10 rounded-full border-2 ${progress.avatar.skinColor === color ? 'border-night scale-110' : 'border-transparent hover:scale-105'} transition-transform shadow-sm`}
-                style={{ backgroundColor: color }}
-              />
-            ))}
+          <h3 className="font-bold text-night mb-3">Character Type</h3>
+          <div className="flex gap-3 mb-4">
+            <button
+              onClick={() => updateAvatar({ variant: undefined })}
+              className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${!progress.avatar.variant ? 'bg-night text-white shadow-md' : 'bg-white text-night border border-slate-200 hover:bg-slate-50'}`}
+            >
+              Custom
+            </button>
+            <button
+              onClick={() => updateAvatar({ variant: 'boy' })}
+              className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${progress.avatar.variant === 'boy' ? 'bg-night text-white shadow-md' : 'bg-white text-night border border-slate-200 hover:bg-slate-50'}`}
+            >
+              Boy
+            </button>
+            <button
+              onClick={() => updateAvatar({ variant: 'girl' })}
+              className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${progress.avatar.variant === 'girl' ? 'bg-night text-white shadow-md' : 'bg-white text-night border border-slate-200 hover:bg-slate-50'}`}
+            >
+              Girl
+            </button>
           </div>
         </div>
 
-        <div>
-          <h3 className="font-bold text-night mb-3">Hair Color</h3>
-          <div className="flex gap-3">
-            {['#FCE786', '#8D5524', '#2D2D2D', '#D65A31', '#FF99C8'].map(color => (
-              <button
-                key={color}
-                onClick={() => updateAvatar({ hairColor: color })}
-                className={`w-10 h-10 rounded-full border-2 ${progress.avatar.hairColor === color ? 'border-night scale-110' : 'border-transparent hover:scale-105'} transition-transform shadow-sm`}
-                style={{ backgroundColor: color }}
-              />
-            ))}
-          </div>
-        </div>
+        {!progress.avatar.variant && (
+          <>
+            <div>
+              <h3 className="font-bold text-night mb-3">Skin Tone</h3>
+              <div className="flex gap-3">
+                {['#FFDFC4', '#E0AC69', '#8D5524', '#5C3A1E'].map(color => (
+                  <button
+                    key={color}
+                    onClick={() => updateAvatar({ skinColor: color })}
+                    className={`w-10 h-10 rounded-full border-2 ${progress.avatar.skinColor === color ? 'border-night scale-110' : 'border-transparent hover:scale-105'} transition-transform shadow-sm`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-night mb-3">Hair Color</h3>
+              <div className="flex gap-3">
+                {['#FCE786', '#8D5524', '#2D2D2D', '#D65A31', '#FF99C8'].map(color => (
+                  <button
+                    key={color}
+                    onClick={() => updateAvatar({ hairColor: color })}
+                    className={`w-10 h-10 rounded-full border-2 ${progress.avatar.hairColor === color ? 'border-night scale-110' : 'border-transparent hover:scale-105'} transition-transform shadow-sm`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         <div>
           <h3 className="font-bold text-night mb-3">Style</h3>

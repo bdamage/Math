@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import NavStats from "../components/NavStats";
+import { soundManager } from "../utils/soundManager";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${

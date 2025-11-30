@@ -13,6 +13,10 @@ class SoundManager {
   private enabled: boolean;
   private sounds: Map<SoundName, HTMLAudioElement>;
   private volume: number = 0.5;
+  private activeSounds: number = 0;
+  private maxConcurrentSounds: number = 5;
+  private audioContext: AudioContext | null = null;
+  private pendingCleanups: number[] = [];
 
   constructor() {
     this.enabled = this.getSoundSetting();
@@ -47,6 +51,14 @@ class SoundManager {
     });
   }
 
+  private getAudioContext(): AudioContext {
+    if (!this.audioContext || this.audioContext.state === 'closed') {
+      this.audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+    }
+    return this.audioContext;
+  }
+
   private playTone(
     frequency: number,
     duration: number,
@@ -54,9 +66,13 @@ class SoundManager {
   ) {
     if (!this.enabled) return;
 
+    // Prevent too many concurrent sounds to avoid performance issues
+    if (this.activeSounds >= this.maxConcurrentSounds) return;
+
     try {
-      const audioContext = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+      this.activeSounds++;
+
+      const audioContext = this.getAudioContext();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 
@@ -75,11 +91,22 @@ class SoundManager {
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + duration);
 
-      // Clean up
-      setTimeout(() => {
-        audioContext.close();
+      // Clean up oscillator nodes
+      const cleanupId = window.setTimeout(() => {
+        oscillator.disconnect();
+        gainNode.disconnect();
+        this.activeSounds--;
+        
+        // Remove this cleanup from pending list
+        const index = this.pendingCleanups.indexOf(cleanupId);
+        if (index > -1) {
+          this.pendingCleanups.splice(index, 1);
+        }
       }, duration * 1000 + 100);
+      
+      this.pendingCleanups.push(cleanupId);
     } catch (error) {
+      this.activeSounds--;
       console.warn("Sound playback failed:", error);
     }
   }
@@ -119,7 +146,26 @@ class SoundManager {
   celebrate() {
     this.playSequence(["confetti", "achievement", "coin"], 150);
   }
+
+  // Clean up all pending sounds and audio context
+  cleanup() {
+    this.pendingCleanups.forEach(id => clearTimeout(id));
+    this.pendingCleanups = [];
+    this.activeSounds = 0;
+    
+    if (this.audioContext && this.audioContext.state !== 'closed') {
+      this.audioContext.close().catch(() => {});
+      this.audioContext = null;
+    }
+  }
 }
 
 // Export singleton instance
 export const soundManager = new SoundManager();
+
+// Cleanup on page unload
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeunload', () => {
+    soundManager.cleanup();
+  });
+}

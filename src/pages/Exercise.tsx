@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { generateQuestion, Difficulty, Skill, Question } from "../state/questionGenerator";
@@ -27,7 +27,13 @@ export default function Exercise() {
   const [finished, setFinished] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  
+  // Track timeouts for cleanup
+  const timeoutsRef = useRef<number[]>([]);
 
+// Reset exercise when skill, difficulty, or table changes
+  const exerciseKey = useMemo(() => `${skill}-${difficulty}-${table}`, [skill, difficulty, table]);
+  
   useEffect(() => {
     setQuestion(generateQuestion(skill, difficulty, table));
     setRoundIndex(0);
@@ -35,7 +41,15 @@ export default function Exercise() {
     setFeedback(null);
     setFinished(false);
     setShowHint(false);
-  }, [skill, difficulty, table]);
+  }, [exerciseKey]);
+  
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(id => clearTimeout(id));
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   const progress = useMemo(() => `${roundIndex + 1}/${ROUND_LENGTH}`, [roundIndex]);
 
@@ -65,17 +79,21 @@ export default function Exercise() {
       if (newScore >= ROUND_LENGTH * 0.8) {
         setShowConfetti(true);
         soundManager.celebrate();
-        setTimeout(() => setShowConfetti(false), 3000);
+        const confettiTimeout = setTimeout(() => setShowConfetti(false), 3000) as unknown as number;
+        timeoutsRef.current.push(confettiTimeout);
       }
       return;
     }
 
-    setTimeout(() => {
-      setQuestion(generateQuestion(skill, difficulty, table));
-      setRoundIndex(nextRoundIndex);
-      setFeedback(null);
-      setShowHint(false);
-    }, 1000); // Increased to 1 second for kids to see feedback
+    const transitionTimeout = setTimeout(() => {
+      if (!finished) { // Extra safety check
+        setQuestion(generateQuestion(skill, difficulty, table));
+        setRoundIndex(nextRoundIndex);
+        setFeedback(null);
+        setShowHint(false);
+      }
+    }, 1000) as unknown as number; // Increased to 1 second for kids to see feedback
+    timeoutsRef.current.push(transitionTimeout);
   };
 
   // Extract numbers from question for visual aid
@@ -162,13 +180,26 @@ export default function Exercise() {
           </p>
           <div className="mt-4 flex gap-3">
             <button
-              onClick={() => navigate(0)}
+              onClick={() => {
+                soundManager.play('click');
+                // Reset all state for retry
+                setQuestion(generateQuestion(skill, difficulty, table));
+                setRoundIndex(0);
+                setScore(0);
+                setFeedback(null);
+                setFinished(false);
+                setShowHint(false);
+                setShowConfetti(false);
+              }}
               className="rounded-full bg-night px-4 py-2 text-white font-semibold"
             >
               {t("exercise.retry")}
             </button>
             <button
-              onClick={() => navigate("/")}
+              onClick={() => {
+                soundManager.play('click');
+                navigate("/");
+              }}
               className="rounded-full bg-white px-4 py-2 font-semibold border border-slate-200"
             >
               {t("exercise.home")}
