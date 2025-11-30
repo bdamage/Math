@@ -14,34 +14,37 @@ export default function Exercise() {
   const skill = state.skill || "multiplication";
   const difficulty = state.difficulty || "easy";
   const table = state.table;
-  const { updateSkill, addPoints } = useProgress();
+  const { addPoints, logSession } = useProgress();
 
   const [question, setQuestion] = useState<Question>(() => generateQuestion(skill, difficulty, table));
   const [roundIndex, setRoundIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
+  const [finished, setFinished] = useState(false);
 
   useEffect(() => {
     setQuestion(generateQuestion(skill, difficulty, table));
     setRoundIndex(0);
     setScore(0);
     setFeedback(null);
+    setFinished(false);
   }, [skill, difficulty, table]);
 
   const progress = useMemo(() => `${roundIndex + 1}/${ROUND_LENGTH}`, [roundIndex]);
 
   const handleAnswer = (value: number) => {
+    if (finished) return;
     const isCorrect = value === question.answer;
     setFeedback(isCorrect ? "correct" : "incorrect");
+    const newScore = isCorrect ? score + 1 : score;
+    if (isCorrect) addPoints(5);
+    setScore(newScore);
 
-    if (isCorrect) {
-      setScore((s) => s + 1);
-      addPoints(5);
+    if (roundIndex + 1 === ROUND_LENGTH) {
+      setFinished(true);
+      logSession({ correct: newScore, total: ROUND_LENGTH, skill, table });
+      return;
     }
-
-    updateSkill(skill, isCorrect ? 1 : 0, 1, table);
-
-    if (roundIndex + 1 === ROUND_LENGTH) return;
 
     setTimeout(() => {
       setQuestion(generateQuestion(skill, difficulty, table));

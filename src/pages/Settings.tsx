@@ -16,13 +16,13 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold text-night">{t("settings.sound")}</p>
-            <p className="text-sm text-night/60">{soundOn ? "On" : "Off"}</p>
+            <p className="text-sm text-night/60">{soundOn ? t("settings.soundOn") : t("settings.soundOff")}</p>
           </div>
           <button
             onClick={() => setSoundOn((v) => !v)}
             className="rounded-full bg-night px-4 py-2 text-white font-semibold"
           >
-            Toggle
+            {t("settings.toggle")}
           </button>
         </div>
         <div className="flex items-center justify-between">
@@ -35,9 +35,9 @@ export default function SettingsPage() {
             onChange={(e) => setDifficulty(e.target.value)}
             className="rounded-lg border border-slate-200 px-3 py-2"
           >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="easy">{t("skill.difficultyOptions.easy")}</option>
+            <option value="medium">{t("skill.difficultyOptions.medium")}</option>
+            <option value="hard">{t("skill.difficultyOptions.hard")}</option>
           </select>
         </div>
       </div>

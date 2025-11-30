@@ -2,18 +2,18 @@ import { useTranslation } from "react-i18next";
 import { useProgress } from "../state/useProgress";
 
 const SHOP_ITEMS = [
-  { id: "lamp", name: "Cozy Lamp", cost: 50 },
-  { id: "plant", name: "Green Plant", cost: 40 },
-  { id: "poster", name: "Math Poster", cost: 60 }
+  { id: "lamp", nameKey: "lamp", cost: 50 },
+  { id: "plant", nameKey: "plant", cost: 40 },
+  { id: "poster", nameKey: "poster", cost: 60 }
 ];
 
 export default function RoomShop() {
   const { t } = useTranslation();
-  const { progress, unlockItem, addPoints } = useProgress();
+  const { progress, unlockItem, spendCoins } = useProgress();
 
   const handleBuy = (id: string, cost: number) => {
     if (progress.coins < cost) return;
-    addPoints(-cost);
+    spendCoins(cost);
     unlockItem(id);
   };
 
@@ -22,18 +22,18 @@ export default function RoomShop() {
       <div className="rounded-2xl bg-gradient-to-br from-sky-200 to-mint-200 p-6 shadow-sm lg:col-span-2">
         <p className="text-sm font-semibold text-night/70">{t("room.title")}</p>
         <div className="mt-4 h-64 rounded-xl border border-white/60 bg-white/70 p-4 shadow-inner">
-          <p className="text-night/70">Room preview</p>
+          <p className="text-night/70">{t("room.title")}</p>
           <div className="mt-2 flex gap-2">
             {progress.room.ownedItems.map((item) => (
               <span
                 key={item}
                 className="rounded-lg bg-white/90 px-3 py-2 text-sm font-semibold text-night shadow"
               >
-                {item}
+                {t(`room.items.${item}`)}
               </span>
             ))}
             {progress.room.ownedItems.length === 0 && (
-              <span className="text-night/60">Buy an item to see it here</span>
+              <span className="text-night/60">{t("room.previewEmpty")}</span>
             )}
           </div>
         </div>
@@ -47,8 +47,10 @@ export default function RoomShop() {
           return (
             <div key={item.id} className="flex items-center justify-between rounded-xl bg-white p-4 shadow-sm">
               <div>
-                <p className="font-semibold text-night">{item.name}</p>
-                <p className="text-sm text-night/60">{item.cost} {t("nav.coins")}</p>
+                <p className="font-semibold text-night">{t(`room.items.${item.nameKey}`)}</p>
+                <p className="text-sm text-night/60">
+                  {item.cost} {t("nav.coins")}
+                </p>
               </div>
               <button
                 disabled={owned || !canAfford}
@@ -61,7 +63,7 @@ export default function RoomShop() {
                     : "bg-slate-100 text-night/50"
                 }`}
               >
-                {owned ? "Owned" : canAfford ? t("room.buy") : t("room.notEnough")}
+                {owned ? t("common.owned") : canAfford ? t("room.buy") : t("room.notEnough")}
               </button>
             </div>
           );

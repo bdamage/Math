@@ -15,13 +15,23 @@
     "daily": "Daily challenge",
     "practiceMultiplication": "Practice Multiplication",
     "continue": "Continue last game",
-    "cta": "Start a quick round"
+    "cta": "Start a quick round",
+    "challengeTitle": "10× Questions",
+    "challengeBody": "Complete a set to earn 50 coins.",
+    "mascotTitle": "Mascot Tip",
+    "mascotBody": "Try a streak of 5 days in a row to unlock a special room item."
   },
   "skill": {
     "title": "Choose a skill",
+    "addition": "Addition",
+    "subtraction": "Subtraction",
+    "multiplication": "Multiplication",
+    "division": "Division",
     "difficulty": "Difficulty",
+    "difficultyOptions": { "easy": "Easy", "medium": "Medium", "hard": "Hard" },
     "table": "Table",
-    "start": "Start practice"
+    "start": "Start practice",
+    "cardDescription": "Fun drills and challenges"
   },
   "exercise": {
     "question": "Question",
@@ -36,24 +46,61 @@
     "title": "Multiplication Trainer",
     "practice": "Practice mode",
     "challenge": "Challenge mode",
-    "chooseTable": "Choose tables"
+    "chooseTable": "Choose tables",
+    "heading": "Tables {{table}}×",
+    "mastery": "Mastery"
   },
   "room": {
     "title": "My Room",
     "shop": "Shop",
     "buy": "Buy",
-    "notEnough": "Not enough coins"
+    "notEnough": "Not enough coins",
+    "previewEmpty": "Buy an item to see it here",
+    "items": {
+      "lamp": "Cozy Lamp",
+      "plant": "Green Plant",
+      "poster": "Math Poster"
+    }
   },
   "progress": {
     "title": "Progress & Achievements",
     "mastery": "Mastery",
-    "badges": "Badges"
+    "badges": "Badges",
+    "correct": "{{correct}}/{{total}} correct",
+    "tableStat": "{{table}}×: {{correct}}/{{total}}",
+    "locked": "Locked",
+    "unlocked": "Unlocked"
   },
   "settings": {
     "title": "Settings",
     "sound": "Sound",
     "difficulty": "Default difficulty",
     "reset": "Reset progress",
-    "confirmReset": "Are you sure you want to reset all progress?"
+    "confirmReset": "Are you sure you want to reset all progress?",
+    "toggle": "Toggle",
+    "soundOn": "On",
+    "soundOff": "Off"
+  },
+  "error": {
+    "title": "Oops, something went wrong",
+    "message": "We couldn't find that page or something broke.",
+    "home": "Back to dashboard",
+    "retry": "Try again"
+  },
+  "onboarding": {
+    "title": "How it works",
+    "steps": [
+      { "title": "Earn coins", "body": "Solve questions to win points and coins." },
+      { "title": "Decorate your room", "body": "Spend coins to buy furniture and posters." },
+      { "title": "Pick your skill", "body": "Addition, subtraction, multiplication, division." },
+      { "title": "Stay on a streak", "body": "Practice daily to unlock bonuses." }
+    ],
+    "start": "Begin adventure"
+  },
+  "common": {
+    "brand": "Math Quest",
+    "goPractice": "Go to practice",
+    "level": "Level",
+    "owned": "Owned"
   }
 }

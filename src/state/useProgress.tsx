@@ -2,12 +2,15 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import {
   MathProgress,
   addPoints,
+  saveProgress,
   loadProgress,
   logPracticeSession,
   resetProgress,
   unlockItem,
-  updateSkillProgress
+  updateSkillProgress,
+  spendCoins
 } from "./progressManager";
+import { evaluateAchievements } from "./achievements";
 
 type ProgressContextValue = {
   progress: MathProgress;
@@ -15,6 +18,7 @@ type ProgressContextValue = {
   updateSkill: (skill: Parameters<typeof updateSkillProgress>[1], correct: number, total: number, table?: number) => void;
   logSession: (params: Parameters<typeof logPracticeSession>[1]) => void;
   unlockItem: (itemId: string) => void;
+  spendCoins: (amount: number) => void;
   reset: () => void;
 };
 
@@ -23,21 +27,42 @@ const ProgressContext = createContext<ProgressContextValue | undefined>(undefine
 export const ProgressProvider = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState<MathProgress>(() => loadProgress());
 
-  const save = (next: MathProgress) => {
-    setProgress(next);
+  const withAchievements = (
+    next: MathProgress,
+    skill: Parameters<typeof updateSkillProgress>[1],
+    table?: number
+  ) => {
+    const newlyUnlocked = evaluateAchievements(next, { skill, streak: next.streakDays, table });
+    if (newlyUnlocked.length) {
+      next = {
+        ...next,
+        achievements: Array.from(new Set([...next.achievements, ...newlyUnlocked]))
+      };
+      saveProgress(next);
+    }
+    return next;
   };
 
-  const handleAddPoints = (amount: number) => save(addPoints(progress, amount));
+  const handleAddPoints = (amount: number) =>
+    setProgress((prev) => withAchievements(addPoints(prev, amount), "addition"));
+
   const handleUpdateSkill = (
     skill: Parameters<typeof updateSkillProgress>[1],
     correct: number,
     total: number,
     table?: number
-  ) => save(updateSkillProgress(progress, skill, correct, total, table));
+  ) =>
+    setProgress((prev) => withAchievements(updateSkillProgress(prev, skill, correct, total, table), skill, table));
+
   const handleLogSession = (params: Parameters<typeof logPracticeSession>[1]) =>
-    save(logPracticeSession(progress, params));
-  const handleUnlockItem = (itemId: string) => save(unlockItem(progress, itemId));
-  const handleReset = () => save(resetProgress());
+    setProgress((prev) => withAchievements(logPracticeSession(prev, params), params.skill, params.table));
+
+  const handleUnlockItem = (itemId: string) =>
+    setProgress((prev) => withAchievements(unlockItem(prev, itemId), "addition"));
+
+  const handleReset = () => setProgress(() => resetProgress());
+  const handleSpendCoins = (amount: number) =>
+    setProgress((prev) => withAchievements(spendCoins(prev, amount), "addition"));
 
   return (
     <ProgressContext.Provider
@@ -47,6 +72,7 @@ export const ProgressProvider = ({ children }: { children: ReactNode }) => {
         updateSkill: handleUpdateSkill,
         logSession: handleLogSession,
         unlockItem: handleUnlockItem,
+        spendCoins: handleSpendCoins,
         reset: handleReset
       }}
     >

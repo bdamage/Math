@@ -15,13 +15,23 @@
     "daily": "Dagens utmaning",
     "practiceMultiplication": "Träna multiplikation",
     "continue": "Fortsätt senaste spelet",
-    "cta": "Starta en snabb runda"
+    "cta": "Starta en snabb runda",
+    "challengeTitle": "10× frågor",
+    "challengeBody": "Klara ett set för att få 50 mynt.",
+    "mascotTitle": "Maskott-tips",
+    "mascotBody": "Försök hålla en streak på 5 dagar i rad för att låsa upp ett rumsföremål."
   },
   "skill": {
     "title": "Välj en färdighet",
+    "addition": "Addition",
+    "subtraction": "Subtraktion",
+    "multiplication": "Multiplikation",
+    "division": "Division",
     "difficulty": "Svårighetsgrad",
+    "difficultyOptions": { "easy": "Lätt", "medium": "Mellan", "hard": "Svår" },
     "table": "Tabell",
-    "start": "Börja träna"
+    "start": "Börja träna",
+    "cardDescription": "Roliga övningar och utmaningar"
   },
   "exercise": {
     "question": "Fråga",
@@ -36,24 +46,61 @@
     "title": "Multiplikationstränare",
     "practice": "Övningsläge",
     "challenge": "Utmaningsläge",
-    "chooseTable": "Välj tabeller"
+    "chooseTable": "Välj tabeller",
+    "heading": "Tabell {{table}}×",
+    "mastery": "Färdighet"
   },
   "room": {
     "title": "Mitt rum",
     "shop": "Butik",
     "buy": "Köp",
-    "notEnough": "Inte tillräckligt med mynt"
+    "notEnough": "Inte tillräckligt med mynt",
+    "previewEmpty": "Köp något för att se det här",
+    "items": {
+      "lamp": "Mysig lampa",
+      "plant": "Grön växt",
+      "poster": "Matteposter"
+    }
   },
   "progress": {
     "title": "Framsteg och medaljer",
     "mastery": "Färdighet",
-    "badges": "Medaljer"
+    "badges": "Medaljer",
+    "correct": "{{correct}}/{{total}} rätt",
+    "tableStat": "{{table}}×: {{correct}}/{{total}}",
+    "locked": "Låst",
+    "unlocked": "Upplåst"
   },
   "settings": {
     "title": "Inställningar",
     "sound": "Ljud",
     "difficulty": "Standard svårighet",
     "reset": "Nollställ framsteg",
-    "confirmReset": "Är du säker på att du vill nollställa allt?"
+    "confirmReset": "Är du säker på att du vill nollställa allt?",
+    "toggle": "Växla",
+    "soundOn": "På",
+    "soundOff": "Av"
+  },
+  "error": {
+    "title": "Oj, något gick fel",
+    "message": "Vi kunde inte hitta sidan eller så hände ett fel.",
+    "home": "Tillbaka till startsidan",
+    "retry": "Försök igen"
+  },
+  "onboarding": {
+    "title": "Så här funkar det",
+    "steps": [
+      { "title": "Tjäna mynt", "body": "Lös frågor för att få poäng och mynt." },
+      { "title": "Inred ditt rum", "body": "Använd mynt för att köpa möbler och planscher." },
+      { "title": "Välj din färdighet", "body": "Addition, subtraktion, multiplikation, division." },
+      { "title": "Håll en streak", "body": "Träna dagligen för att låsa upp bonusar." }
+    ],
+    "start": "Börja äventyret"
+  },
+  "common": {
+    "brand": "Math Quest",
+    "goPractice": "Gå till träna",
+    "level": "Nivå",
+    "owned": "Ägs"
   }
 }

@@ -11,10 +11,8 @@ export default function Dashboard() {
       <div className="lg:col-span-2 space-y-4">
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <p className="text-sm font-semibold text-ocean">{t("dashboard.welcome")}</p>
-          <h1 className="text-3xl font-bold text-night">Math Quest</h1>
-          <p className="mt-2 text-night/70">
-            {t("dashboard.daily")}: Solve 10 problems to earn a bonus chest.
-          </p>
+          <h1 className="text-3xl font-bold text-night">{t("common.brand")}</h1>
+          <p className="mt-2 text-night/70">{t("dashboard.daily")}: {t("dashboard.challengeBody")}</p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               to="/trainer"
@@ -34,26 +32,24 @@ export default function Dashboard() {
           <StatCard label={t("nav.points")} value={progress.points} accent="bg-ocean/10" />
           <StatCard label={t("nav.coins")} value={progress.coins} accent="bg-sunshine/40" />
           <StatCard label={t("nav.streak")} value={progress.streakDays} accent="bg-coral/20" />
-          <StatCard label="Level" value={progress.skills.multiplication.level} accent="bg-mint/40" />
+          <StatCard label={t("common.level")} value={progress.skills.multiplication.level} accent="bg-mint/40" />
         </div>
       </div>
       <div className="space-y-4">
         <div className="rounded-2xl bg-gradient-to-br from-sunshine to-coral text-night p-6 shadow-sm">
           <p className="text-sm font-semibold">{t("dashboard.daily")}</p>
-          <h2 className="text-2xl font-bold mt-1">10× Questions</h2>
-          <p className="mt-2 text-night/80">Complete a set to earn 50 coins.</p>
+          <h2 className="text-2xl font-bold mt-1">{t("dashboard.challengeTitle")}</h2>
+          <p className="mt-2 text-night/80">{t("dashboard.challengeBody")}</p>
           <Link
             to="/practice"
             className="mt-4 inline-block rounded-full bg-night px-4 py-2 text-white font-semibold"
           >
-            Go to practice
+            {t("common.goPractice")}
           </Link>
         </div>
         <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-night">Mascot Tip</h3>
-          <p className="text-night/70 mt-2">
-            Try a streak of 5 days in a row to unlock a special room item!
-          </p>
+          <h3 className="text-lg font-bold text-night">{t("dashboard.mascotTitle")}</h3>
+          <p className="text-night/70 mt-2">{t("dashboard.mascotBody")}</p>
         </div>
       </div>
     </div>

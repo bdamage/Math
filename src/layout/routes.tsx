@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppShell from "./AppShell";
+import RouterError from "./RouterError";
 import Dashboard from "../pages/Dashboard";
 import SkillSelect from "../pages/SkillSelect";
 import Exercise from "../pages/Exercise";
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: withProviders(<AppShell />),
+    errorElement: withProviders(<RouterError />),
     children: [
       { index: true, element: <Dashboard /> },
       { path: "practice", element: <SkillSelect /> },

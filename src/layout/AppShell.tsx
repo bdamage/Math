@@ -16,7 +16,7 @@ export default function AppShell() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <span className="rounded-full bg-ocean/10 px-3 py-1 text-sm font-bold text-ocean">
-              Math Quest
+              {t("common.brand")}
             </span>
             <NavStats />
           </div>

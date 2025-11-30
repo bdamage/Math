@@ -24,8 +24,8 @@ export default function SkillSelect() {
               skill === s ? "border-night bg-white" : "border-slate-200 bg-white/70 hover:border-night/30"
             }`}
           >
-            <p className="font-semibold capitalize">{s}</p>
-            <p className="text-sm text-night/60">Fun drills and challenges</p>
+            <p className="font-semibold capitalize">{t(`skill.${s}`, s)}</p>
+            <p className="text-sm text-night/60">{t("skill.cardDescription")}</p>
           </button>
         ))}
       </div>
@@ -42,7 +42,7 @@ export default function SkillSelect() {
               difficulty === d ? "bg-night text-white" : "bg-white border border-slate-200 hover:border-night/40"
             }`}
           >
-            {d}
+            {t(`skill.difficultyOptions.${d}`)}
           </button>
         ))}
       </div>

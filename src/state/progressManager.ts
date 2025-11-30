@@ -94,6 +94,12 @@ export const addPoints = (progress: MathProgress, amount: number): MathProgress 
   return updated;
 };
 
+export const spendCoins = (progress: MathProgress, amount: number): MathProgress => {
+  const updated = { ...progress, coins: Math.max(0, progress.coins - amount) };
+  saveProgress(updated);
+  return updated;
+};
+
 export const updateSkillProgress = (
   progress: MathProgress,
   skill: SkillKey,
@@ -101,7 +107,7 @@ export const updateSkillProgress = (
   totalDelta: number,
   table?: number
 ): MathProgress => {
-  const next = structuredClone(progress);
+  const next: MathProgress = JSON.parse(JSON.stringify(progress));
   const skillProgress = next.skills[skill];
 
   skillProgress.correctAnswers += correctDelta;
